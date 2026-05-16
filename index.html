@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎁 Rocket Gifts | Все подарки Telegram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03050a);
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
+            color: #f0f3ff;
+            padding: 20px 16px 90px 16px;
+            min-height: 100vh;
+        }
+
+        /* стекло */
+        .glass {
+            background: rgba(20, 28, 45, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 48px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* баланс */
+        .balance-card {
+            background: linear-gradient(135deg, #1e2a3e 0%, #0f1728 100%);
+            border-radius: 40px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,215,0,0.3);
+            box-shadow: 0 0 15px rgba(255,215,0,0.2);
+            transition: 0.3s;
+        }
+        .balance-label {
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #b9c7ff;
+        }
+        .balance-value {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD966, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+        }
+        .balance-value span {
+            font-size: 26px;
+            background: none;
+            color: #FFB347;
+        }
+        .topup-btn {
+            background: rgba(255,180,70,0.2);
+            border: 1px solid #ffb347;
+            padding: 10px 18px;
+            border-radius: 60px;
+            font-weight: bold;
+            margin-top: 12px;
+            width: auto;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+            cursor: pointer;
+            color: #ffdfa5;
+        }
+        .topup-btn:active { transform: scale(0.96); background: #ffb34730; }
+
+        /* вкладки */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 100px;
+            padding: 6px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(8px);
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            background: transparent;
+        }
+        .tab.active {
+            background: #ffb347;
+            color: #0a0a1a;
+            box-shadow: 0 4px 15px rgba(255,180,70,0.5);
+        }
+
+        /* сетка подарков шикарная */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .gift-card {
+            background: linear-gradient(145deg, #1a1f30, #111624);
+            border-radius: 28px;
+            padding: 18px 8px 16px;
+            text-align: center;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255,200,100,0.2);
+            cursor: pointer;
+            animation: fadeUp 0.3s ease;
+        }
+        .gift-card:hover {
+            transform: translateY(-6px);
+            border-color: #ffb347;
+            box-shadow: 0 12px 28px rgba(255,180,70,0.3);
+        }
+        .gift-emoji {
+            font-size: 56px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transition: 0.2s;
+        }
+        .gift-name {
+            font-weight: bold;
+            margin: 12px 0 6px;
+            font-size: 15px;
+        }
+        .gift-price {
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFD966;
+        }
+        .price-star {
+            font-size: 14px;
+        }
+
+        /* форма отправки */
+        .send-form {
+            padding: 24px;
+            border-radius: 48px;
+            background: rgba(18, 24, 40, 0.9);
+            backdrop-filter: blur(16px);
+            margin-top: 8px;
+            border: 1px solid rgba(255,180,70,0.5);
+            animation: slideUp 0.3s;
+        }
+        .rocket-animation {
+            font-size: 68px;
+            text-align: center;
+            transition: 0.2s;
+            margin-bottom: 12px;
+        }
+        input, textarea {
+            width: 100%;
+            background: #0c1020;
+            border: 1px solid #2f3a60;
+            border-radius: 36px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+        textarea { border-radius: 28px; resize: vertical; }
+        .form-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .form-actions button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.15s;
+            border: none;
+        }
+        .confirm-send {
+            background: #ffb347;
+            color: #0f0f1c;
+            box-shadow: 0 0 8px #ffb347;
+        }
+        .cancel-send {
+            background: #2a2f4e;
+            color: white;
+        }
+        .btn-back {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid #ffb34780;
+            padding: 12px;
+            border-radius: 60px;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 16px;
+            cursor: pointer;
+        }
+
+        /* история */
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .history-item {
+            background: rgba(10, 14, 24, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 14px 18px;
+            border-left: 6px solid #ffb347;
+            transition: 0.1s;
+        }
+        .history-gift {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        .confetti-canvas {
+            position: fixed;
+            top:0;
+            left:0;
+            pointer-events: none;
+            z-index: 999;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="balance-card glass">
+        <div class="balance-label">⭐ МОИ КРИСТАЛЛЫ ⭐</div>
+        <div class="balance-value" id="balanceDisplay">0 <span>gift⭐</span></div>
+        <button class="topup-btn" id="topupBtn">✨ НАЧИСЛИТЬ 250 ✨</button>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="send">🎁 ПОДАРКИ</div>
+        <div class="tab" data-tab="history">📜 ИСТОРИЯ</div>
+    </div>
+
+    <div id="sendPanel">
+        <div class="gift-grid" id="giftsList"></div>
+        <div id="sendFormContainer" class="hidden"></div>
+        <button id="resetSendBtn" class="btn-back hidden">◀ К списку подарков</button>
+    </div>
+    <div id="historyPanel" class="hidden">
+        <div class="history-list" id="historyList"></div>
+    </div>
+</div>
+<canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+<script>
+    // ---------- ВСЕ ПОДАРКИ TELEGRAM (12 штук) с крутыми иконками ----------
+    const GIFT_CATALOG = [
+        { id: 1, name: "❤️ Пылающее сердце", price: 45, emoji: "❤️‍🔥", animation: "💖" },
+        { id: 2, name: "🚀 Космическая ракета", price: 90, emoji: "🚀✨", animation: "🌠" },
+        { id: 3, name: "⭐ Звездный дождь", price: 60, emoji: "⭐🌠", animation: "🌟" },
+        { id: 4, name: "🎂 Имбирный торт", price: 75, emoji: "🍰🎂", animation: "🕯️" },
+        { id: 5, name: "🧸 Плюшевый мишка", price: 100, emoji: "🧸💝", animation: "🎀" },
+        { id: 6, name: "🍾 Шампанское", price: 120, emoji: "🍾🥂", animation: "🍾✨" },
+        { id: 7, name: "🎮 PS5 Ultra", price: 300, emoji: "🎮🕹️", animation: "⚡" },
+        { id: 8, name: "🏎️ Ламборгини", price: 500, emoji: "🏎️💨", animation: "🔥" },
+        { id: 9, name: "₿ Биткоин", price: 420, emoji: "₿🚀", animation: "📈" },
+        { id: 10, name: "🌹 Золотая роза", price: 150, emoji: "🌹✨", animation: "💫" },
+        { id: 11, name: "💍 Космическое кольцо", price: 280, emoji: "💍🌌", animation: "💎" },
+        { id: 12, name: "✈️ Частный джет", price: 750, emoji: "🛩️💎", animation: "✈️🌟" }
+    ];
+
+    let balance = 680;
+    let sentHistory = [];    // отправленные
+    let receivedHistory = []; // полученные (демо)
+
+    let selectedGift = null;
+
+    function loadData() {
+        let b = localStorage.getItem("rg_balance");
+        if(b !== null) balance = parseInt(b);
+        let s = localStorage.getItem("rg_sent");
+        if(s) sentHistory = JSON.parse(s);
+        let r = localStorage.getItem("rg_received");
+        if(r) receivedHistory = JSON.parse(r);
+        updateUI();
+    }
+    function saveAll() {
+        localStorage.setItem("rg_balance", balance);
+        localStorage.setItem("rg_sent", JSON.stringify(sentHistory));
+        localStorage.setItem("rg_received", JSON.stringify(receivedHistory));
+    }
+    function updateUI() {
+        document.getElementById("balanceDisplay").innerHTML = balance + ' <span>⭐</span>';
+        renderGiftsGrid();
+        renderHistory();
+    }
+
+    function renderGiftsGrid() {
+        const grid = document.getElementById("giftsList");
+        if(!grid) return;
+        grid.innerHTML = GIFT_CATALOG.map(g => `
+            <div class="gift-card" data-id="${g.id}">
+                <div class="gift-emoji">${g.emoji}</div>
+                <div class="gift-name">${g.name}</div>
+                <div class="gift-price">${g.price} <span class="price-star">⭐</span></div>
+            </div>
+        `).join("");
+        document.querySelectorAll(".gift-card").forEach(card => {
+            card.addEventListener("click", (e) => {
+                const id = parseInt(card.dataset.id);
+                selectedGift = GIFT_CATALOG.find(g => g.id === id);
+                showSendForm();
+            });
+        });
+    }
+
+    function showSendForm() {
+        if(!selectedGift) return;
+        const container = document.getElementById("sendFormContainer");
+        const resetBtn = document.getElementById("resetSendBtn");
+        document.getElementById("giftsList").classList.add("hidden");
+        container.classList.remove("hidden");
+        resetBtn.classList.remove("hidden");
+
+        container.innerHTML = `
+            <div class="send-form">
+                <div class="rocket-animation" id="flyRocketAnim">${selectedGift.emoji} ➡️ ✨</div>
+                <h3 style="text-align:center; margin-bottom:12px;">${selectedGift.name} (${selectedGift.price}⭐)</h3>
+                <input id="recipientUser" placeholder="Telegram username (например @durov)" />
+                <textarea id="msgText" placeholder="Теплое сообщение..."></textarea>
+                <div class="form-actions">
+                    <button id="confirmSendBtn">🎁 ОТПРАВИТЬ</button>
+                    <button id="cancelSendFormBtn">❌ ОТМЕНА</button>
+                </div>
+            </div>
+        `;
+        document.getElementById("confirmSendBtn").onclick = () => sendGiftLogic();
+        document.getElementById("cancelSendFormBtn").onclick = () => cancelSend();
+    }
+
+    function startConfetti() {
+        const canvas = document.getElementById("confettiCanvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+        for(let i=0;i<120;i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 8 + 3,
+                speedY: Math.random() * 6 + 6,
+                color: `hsl(${Math.random() * 60 + 30}, 100%, 60%)`
+            });
+        }
+        let frame;
+        function draw() {
+            if(!ctx) return;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            let alive = false;
+            for(let p of particles) {
+                p.y += p.speedY;
+                if(p.y < canvas.height + 50) alive = true;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.rect(p.x, p.y, p.size, p.size*0.6);
+                ctx.fill();
+            }
+            if(alive) requestAnimationFrame(draw);
+            else canvas.getContext("2d")?.clearRect(0,0,canvas.width,canvas.height);
+        }
+        draw();
+        setTimeout(() => { if(canvas) canvas.width=0; }, 1800);
+    }
+
+    function sendGiftLogic() {
+        if(!selectedGift) return;
+        let recipient = document.getElementById("recipientUser")?.value.trim();
+        if(!recipient) { alert("👤 Укажите получателя"); return; }
+        recipient = recipient.replace("@","");
+        const msg = document.getElementById("msgText")?.value.trim() || "✨ С любовью!";
+        if(balance < selectedGift.price) {
+            alert(`Не хватает ${selectedGift.price} ⭐`);
+            return;
+        }
+        balance -= selectedGift.price;
+        const newSent = {
+            to: recipient,
+            giftName: selectedGift.name,
+            emoji: selectedGift.emoji,
+            message: msg,
+            date: new Date().toLocaleString(),
+            price: selectedGift.price
+        };
+        sentHistory.unshift(newSent);
+        // демо-получение (имитация)
+        receivedHistory.unshift({
+            from: `@${recipient}`,
+            giftName: selectedGift.name,
+            emoji: selectedGift.emoji,
+            message: msg,
+            date: new Date().toLocaleString()
+        });
+        saveAll();
+        updateUI();
+        startConfetti();
+
+        // анимируем ракету
+        const animDiv = document.getElementById("flyRocketAnim");
+        if(animDiv) {
+            animDiv.innerHTML = "🚀✨💥 ПОДАРОК УЛЕТЕЛ! 💥✨🚀";
+            setTimeout(() => {
+                if(animDiv) animDiv.innerHTML = `${selectedGift.emoji} ➡️ 🌟`;
+            }, 1300);
+        }
+        setTimeout(() => {
+            cancelSend();
+            document.querySelector(".tab[data-tab='history']").click();
+        }, 800);
+    }
+
+    function cancelSend() {
+        selectedGift = null;
+        document.getElementById("sendFormContainer").classList.add("hidden");
+        document.getElementById("resetSendBtn").classList.add("hidden");
+        document.getElementById("giftsList").classList.remove("hidden");
+    }
+
+    function renderHistory() {
+        const historyDiv = document.getElementById("historyList");
+        if(sentHistory.length === 0 && receivedHistory.length===0){
+            historyDiv.innerHTML = `<div style="text-align:center; padding: 28px;">🎀 История подарков пуста</div>`;
+            return;
+        }
+        let html = `<div style="margin-bottom: 12px; font-weight:bold;">📤 ОТПРАВЛЕННЫЕ</div>`;
+        sentHistory.forEach(s => {
+            html += `<div class="history-item"><span class="history-gift">${s.emoji}</span> <strong>${s.giftName}</strong><br>Кому: @${s.to}<br>${s.message}<br><span style="font-size:12px;">${s.date}  -${s.price}⭐</span></div>`;
+        });
+        html += `<div style="margin: 16px 0 12px 0; font-weight:bold;">📥 ПОЛУЧЕННЫЕ (демо)</div>`;
+        receivedHistory.forEach(r => {
+            html += `<div class="history-item"><span class="history-gift">${r.emoji}</span> <strong>${r.giftName}</strong><br>От: ${r.from}<br>${r.message}<br><span style="font-size:12px;">${r.date}</span></div>`;
+        });
+        historyDiv.innerHTML = html;
+    }
+
+    document.getElementById("topupBtn").onclick = () => {
+        balance += 250;
+        saveAll();
+        updateUI();
+    };
+    document.getElementById("resetSendBtn").onclick = cancelSend;
+
+    document.querySelectorAll(".tab").forEach(t => {
+        t.onclick = () => {
+            document.querySelectorAll(".tab").forEach(tab=>tab.classList.remove("active"));
+            t.classList.add("active");
+            if(t.dataset.tab === "send") {
+                document.getElementById("sendPanel").classList.remove("hidden");
+                document.getElementById("historyPanel").classList.add("hidden");
+                cancelSend();
+            } else {
+                document.getElementById("sendPanel").classList.add("hidden");
+                document.getElementById("historyPanel").classList.remove("hidden");
+                renderHistory();
+            }
+        };
+    });
+    loadData();
+    cancelSend();
+    // бонус: при загрузке показываем подарки
+    renderGiftsGrid();
+</script>
+</body>
+</html>
